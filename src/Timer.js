@@ -1,10 +1,12 @@
 import React from 'react';
-import { Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { Text, View, Animated, Dimensions, Keyboard, TextInput, UIManager  } from 'react-native';
 import {vibrate} from '../utils/vibrate';
 import { styles, inputStyles } from '../styles/styles';
 import TimeDisplay from './TimeDisplay';
 import Btn from './Btn';
 import TimeInput from './TimeInput';
+
+const { State: TextInputState } = TextInput;
 
 export default class Timer extends React.Component {
   state = {
@@ -15,7 +17,14 @@ export default class Timer extends React.Component {
     isWorking: true,
     isPaused: false,
     timer: null,
-    counter: 1800 // 1800secs = 30 mins
+    counter: 1800, // 1800secs = 30 mins
+    // Used for animating the view upwards so keybaord doesnt cover active input
+    shift: new Animated.Value(0)
+  }
+
+  componentWillMount() {
+    this.keyboardDidShowSub = Keyboard.addListener('keyboardDidShow', this.handleKeyboardDidShow);
+    this.keyboardDidHideSub = Keyboard.addListener('keyboardDidHide', this.handleKeyboardDidHide);
   }
 
   componentDidMount() {
@@ -24,6 +33,8 @@ export default class Timer extends React.Component {
 
   componentWillUnmount() {
     clearInterval(this.state.timer);
+    this.keyboardDidShowSub.remove();
+    this.keyboardDidHideSub.remove();
   }
 
   startTimer = () => {
@@ -86,13 +97,46 @@ export default class Timer extends React.Component {
     return parseInt(value)
   }
 
+  handleKeyboardDidShow = (event) => {
+    const { height: windowHeight } = Dimensions.get('window');
+    const keyboardHeight = event.endCoordinates.height;
+    const currentlyFocusedField = TextInputState.currentlyFocusedField();
+    UIManager.measure(currentlyFocusedField, (originX, originY, width, height, pageX, pageY) => {
+      const fieldHeight = height;
+      const fieldTop = pageY;
+      const gap = (windowHeight - keyboardHeight) - (fieldTop + fieldHeight);
+      if (gap >= 0) {
+        return;
+      }
+      Animated.timing(
+        this.state.shift,
+        {
+          toValue: gap,
+          duration: 1000,
+          useNativeDriver: true,
+        }
+      ).start();
+    });
+  }
+
+  handleKeyboardDidHide = () => {
+    Animated.timing(
+      this.state.shift,
+      {
+        toValue: 0,
+        duration: 1000,
+        useNativeDriver: true,
+      }
+    ).start();
+  }
+
   render() {
-    console.log(this.state.workMinutes);
     const mins = Math.floor(this.state.counter / 60);
     const secs = this.state.counter % 60;
+    const transformStyle = { transform: [{translateY: this.state.shift}] }
 
     return (
-      <View style={styles.container}>
+      <Animated.View style={[styles.container, transformStyle]}>
         <View style={[styles.header, styles.section]}>
           <Text style={styles.headerText}>Pomodoro</Text>
           <Text style={styles.headerText}>Timer</Text>
@@ -128,7 +172,7 @@ export default class Timer extends React.Component {
               value={this.state.breakSeconds.toString()} />
           </View>
         </View>
-      </View>
+      </Animated.View>
     )
   }
 }
