@@ -1,21 +1,9 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
-
+import { Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { styles } from '../styles/styles';
 import TimeDisplay from './TimeDisplay';
+import Btn from './Btn';
 import {vibrate} from '../utils/vibrate';
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  input: {
-    width: 100,
-    textAlign: "center"
-  }
-});
 
 export default class Timer extends React.Component {
   state = {
@@ -99,29 +87,42 @@ export default class Timer extends React.Component {
 
     return (
       <View style={styles.container}>
-        <View>
-          <Text>Pomodoro Timer</Text>
+        <View style={[styles.header, styles.section]}>
+          <Text style={styles.headerText}>Pomodoro Timer</Text>
         </View>
         <TimeDisplay mins={mins} secs={secs} />
-        {this.state.isPaused ? <Button onPress={this.startTimer} title="Start" />
-        : <Button onPress={this.stopTimer} title="Pause" />}
-        <Button onPress={this.resetTimer} title="Reset" />
-        <TextInput style={styles.input}
-          keyboardType='numeric'
-          onChangeText={(workMinutes) => this.setState({workMinutes})}
-          value={this.state.workMinutes.toString()} />
-        <TextInput style={styles.input}
-          keyboardType='numeric'
-          onChangeText={(workSeconds) => this.setState({workSeconds})}
-          value={this.state.workSeconds.toString()} />
-        <TextInput style={styles.input}
-          keyboardType='numeric'
-          onChangeText={(breakMinutes) => this.setState({breakMinutes})}
-          value={this.state.breakMinutes.toString()} />
-        <TextInput style={styles.input}
-          keyboardType='numeric'
-          onChangeText={(breakSeconds) => this.setState({breakSeconds})}
-          value={this.state.breakSeconds.toString()} />
+        <View style={styles.controlsSection}>
+          <View style={styles.buttonRow}>
+            <View style={styles.buttonContainer}>
+            {this.state.isPaused ? 
+              <Btn onPress={this.startTimer} title="Start" colour="dodgerblue" textColour="white" />
+            : <Btn onPress={this.stopTimer} title="Pause" />}
+            </View>
+            <View style={styles.buttonContainer}>
+              <Btn onPress={this.resetTimer} title="Reset" colour="red" textColour="white" />
+            </View>
+          </View>
+          <View style={styles.controlRow}>
+            <TextInput style={styles.input}
+              keyboardType='numeric'
+              onChangeText={(workMinutes) => this.setState({workMinutes})}
+              value={this.state.workMinutes.toString()} />
+            <TextInput style={styles.input}
+              keyboardType='numeric'
+              onChangeText={(workSeconds) => this.setState({workSeconds})}
+              value={this.state.workSeconds.toString()} />
+          </View>
+          <View style={styles.controlRow}>
+            <TextInput style={styles.input}
+              keyboardType='numeric'
+              onChangeText={(breakMinutes) => this.setState({breakMinutes})}
+              value={this.state.breakMinutes.toString()} />
+            <TextInput style={styles.input}
+              keyboardType='numeric'
+              onChangeText={(breakSeconds) => this.setState({breakSeconds})}
+              value={this.state.breakSeconds.toString()} />
+          </View>
+        </View>
       </View>
     )
   }

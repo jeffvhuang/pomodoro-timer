@@ -3,12 +3,13 @@ import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
 import PropTypes from 'prop-types';
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+  timeSection: {
+    flex: 2,
+    justifyContent: 'center'
   },
+  time: {
+    fontSize: 96
+  }
 });
 
 TimeDisplay.propTypes = {
@@ -20,8 +21,8 @@ export default function TimeDisplay({ mins, secs }) {
   const minsString = (mins < 10) ? '0' + mins : mins.toString();
   const secString = (secs < 10) ? '0' + secs : secs.toString();
   return (
-    <View>
-      <Text>{minsString}:{secString}</Text>
+    <View style={styles.timeSection}>
+      <Text style={styles.time}>{minsString}:{secString}</Text>
     </View>
   )
 }
