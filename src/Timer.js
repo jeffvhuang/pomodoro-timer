@@ -24,6 +24,7 @@ export default class Timer extends React.Component {
     breakMinutes: 5,
     breakSeconds: 0,
     isWorking: true,
+    isPaused: false,
     timer: null,
     counter: 1800 // 1800secs = 30 mins
   }
@@ -33,20 +34,33 @@ export default class Timer extends React.Component {
   }
 
   componentWillUnmount() {
-    stopTimer();
+    clearInterval(this.state.timer);
   }
 
   startTimer = () => {
     let timer = setInterval(this.tick, 1000);
-    this.setState({timer});
+    this.setState({ timer, isPaused: false });
   }
 
   stopTimer = () => {
-    this.clearInterval(this.state.timer);
+    clearInterval(this.state.timer);
+    this.setState({ isPaused: true });
   }
 
   setCounter = (mins, secs) => {
-    this.setState({ counter: mins*60 + secs });
+    this.setState(prevState => ({ 
+      counter: mins*60 + secs,
+      isWorking: !prevState.isWorking
+    }));
+  }
+
+  resetTimer = () => {
+    this.stopTimer();
+    this.setState(prevState => ({
+      counter: prevState.workMinutes*60 + prevState.workSeconds,
+      isWorking: true,
+      isPaused: true
+    }));
   }
 
   tick = () => {
@@ -59,14 +73,6 @@ export default class Timer extends React.Component {
     } else {
       this.setState(prevState => ({ counter: prevState.counter - 1 }));
     }
-  }
-
-  resetTimer = () => {
-    this.stopTimer();
-    this.setState(prevState => ({
-      counter: prevState.workMinutes*60 + prevState.workSeconds,
-      isWorking: true
-    }));
   }
 
   onChanged = (type, text) => {
@@ -97,8 +103,8 @@ export default class Timer extends React.Component {
           <Text>Pomodoro Timer</Text>
         </View>
         <TimeDisplay mins={mins} secs={secs} />
-        <Button onPress={this.startTimer} title="Start" />
-        <Button onPress={this.stopTimer} title="Pause" />
+        {this.state.isPaused ? <Button onPress={this.startTimer} title="Start" />
+        : <Button onPress={this.stopTimer} title="Pause" />}
         <Button onPress={this.resetTimer} title="Reset" />
         <TextInput style={styles.input}
           keyboardType='numeric'
