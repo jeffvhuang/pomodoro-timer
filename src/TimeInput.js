@@ -1,28 +1,24 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
+import { Text, View, TextInput } from 'react-native';
 import PropTypes from 'prop-types';
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+import { inputStyles } from '../styles/styles';
 
 TimeInput.propTypes = {
-  mins: PropTypes.number.isRequired,
-  secs: PropTypes.number.isRequired
+  label: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  value: PropTypes.string.isRequired
 }
 
-export default function TimeInput({ mins, secs }) {
+export default function TimeInput({ label, onChange, value }) {
   return (
-    <>
-      <TextInput
-        ref= {(el) => { this.username = el; }}
-        onChangeText={(username) => this.setState({username})}
-        value={this.state.username} />
-    </>
+    <View style={inputStyles.inputRow}>
+      <View style={inputStyles.labelContainer}>
+        <Text style={inputStyles.label}>{label}</Text>
+      </View>
+      <TextInput style={inputStyles.input}
+        keyboardType='numeric'
+        onChangeText={onChange}
+        value={value} />
+    </View>
   )
 }

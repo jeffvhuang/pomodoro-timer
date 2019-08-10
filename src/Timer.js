@@ -1,9 +1,10 @@
 import React from 'react';
 import { Text, View, TextInput, TouchableOpacity } from 'react-native';
-import { styles } from '../styles/styles';
+import {vibrate} from '../utils/vibrate';
+import { styles, inputStyles } from '../styles/styles';
 import TimeDisplay from './TimeDisplay';
 import Btn from './Btn';
-import {vibrate} from '../utils/vibrate';
+import TimeInput from './TimeInput';
 
 export default class Timer extends React.Component {
   state = {
@@ -63,21 +64,19 @@ export default class Timer extends React.Component {
     }
   }
 
-  onChanged = (type, text) => {
-    const number = parseInt(text);
-    switch (type) {
+  // Return a function based on what string is passed in to set the correct satte property
+  getOnChangeFunction = (stateProperty) => {
+    switch(stateProperty) {
       case 'workMinutes':
-        this.setState({ workMinutes: number })
-        break;
+        return (value) => this.setState({workMinutes: value});
       case 'workSeconds':
-        this.setState({ workSeconds: number })
-        break;
+          return (value) => this.setState({workSeconds: value});
       case 'breakMinutes':
-        this.setState({ breakMinutes: number })
-        break;
+          return (value) => this.setState({breakMinutes: value});
       case 'breakSeconds':
-        this.setState({ breakSeconds: number })
-        break;
+          return (value) => this.setState({breakSeconds: value});
+      default:
+        return () => {}
     }
   }
 
@@ -88,7 +87,8 @@ export default class Timer extends React.Component {
     return (
       <View style={styles.container}>
         <View style={[styles.header, styles.section]}>
-          <Text style={styles.headerText}>Pomodoro Timer</Text>
+          <Text style={styles.headerText}>Pomodoro</Text>
+          <Text style={styles.headerText}>Timer</Text>
         </View>
         <TimeDisplay mins={mins} secs={secs} />
         <View style={styles.controlsSection}>
@@ -103,23 +103,21 @@ export default class Timer extends React.Component {
             </View>
           </View>
           <View style={styles.controlRow}>
-            <TextInput style={styles.input}
-              keyboardType='numeric'
-              onChangeText={(workMinutes) => this.setState({workMinutes})}
+            <Text style={inputStyles.label}>Work:</Text>
+            <TimeInput label={'Mins'} 
+              onChange={this.getOnChangeFunction('workMinutes')}
               value={this.state.workMinutes.toString()} />
-            <TextInput style={styles.input}
-              keyboardType='numeric'
-              onChangeText={(workSeconds) => this.setState({workSeconds})}
+            <TimeInput label={'Secs'} 
+              onChange={this.getOnChangeFunction('workSeconds')}
               value={this.state.workSeconds.toString()} />
           </View>
           <View style={styles.controlRow}>
-            <TextInput style={styles.input}
-              keyboardType='numeric'
-              onChangeText={(breakMinutes) => this.setState({breakMinutes})}
+            <Text style={inputStyles.label}>Break:</Text>
+            <TimeInput label={'Mins'} 
+              onChange={this.getOnChangeFunction('breakMinutes')}
               value={this.state.breakMinutes.toString()} />
-            <TextInput style={styles.input}
-              keyboardType='numeric'
-              onChangeText={(breakSeconds) => this.setState({breakSeconds})}
+            <TimeInput label={'Secs'} 
+              onChange={this.getOnChangeFunction('breakSeconds')}
               value={this.state.breakSeconds.toString()} />
           </View>
         </View>

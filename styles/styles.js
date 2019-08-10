@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
     width: '100%'
   },
   header: {
-    // alignItems: 'center',
+    alignItems: 'center',
     flex: 2
   },
   headerText: {
@@ -20,10 +20,6 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     flexDirection: 'column'
   },
-  input: {
-    width: 100,
-    textAlign: "center"
-  },
   section: {
     justifyContent: 'center',
   },
@@ -31,23 +27,19 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: "space-evenly"
   },
+  buttonContainer: {
+    flexDirection: 'row'
+  },
   controlRow: {
     flexDirection: 'row',
     justifyContent: "space-evenly",
-    fontSize: 42,
     width: '100%'
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    // flex: 1,
-    // width: 100
-    // justifyContent: 'center'
   }
 });
 
 export const btnStyles = StyleSheet.create({
   button: {
-    height: 50,
+    height: 60,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -56,7 +48,27 @@ export const btnStyles = StyleSheet.create({
     width: 120
   },
   buttonText: {
-    fontSize: 24
-  },
+    fontSize: 26
+  }
+})
 
+export const inputStyles = StyleSheet.create({
+  inputRow: {
+    flexDirection: "row"
+  },
+  labelContainer: {
+    justifyContent: 'center'
+  },
+  label: {
+    justifyContent: 'center',
+    fontSize: 26,
+    marginRight: 10
+  },
+  input: {
+    width: 70,
+    textAlign: "center",
+    fontSize: 26,
+    backgroundColor: 'gainsboro',
+    borderRadius: 5
+  }
 })
