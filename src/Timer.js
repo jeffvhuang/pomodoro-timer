@@ -68,19 +68,26 @@ export default class Timer extends React.Component {
   getOnChangeFunction = (stateProperty) => {
     switch(stateProperty) {
       case 'workMinutes':
-        return (value) => this.setState({workMinutes: value});
+        return (value) => this.setState({workMinutes: this.getValue(value)});
       case 'workSeconds':
-          return (value) => this.setState({workSeconds: value});
+          return (value) => this.setState({workSeconds: this.getValue(value)});
       case 'breakMinutes':
-          return (value) => this.setState({breakMinutes: value});
+          return (value) => this.setState({breakMinutes: this.getValue(value)});
       case 'breakSeconds':
-          return (value) => this.setState({breakSeconds: value});
+          return (value) => this.setState({breakSeconds: this.getValue(value)});
       default:
         return () => {}
     }
   }
 
+  // Helper to ensure only number is provided
+  getValue = (value) => {
+    if (isNaN(value) || !value) return 0
+    return parseInt(value)
+  }
+
   render() {
+    console.log(this.state.workMinutes);
     const mins = Math.floor(this.state.counter / 60);
     const secs = this.state.counter % 60;
 
