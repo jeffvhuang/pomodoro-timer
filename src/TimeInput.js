@@ -11,17 +11,18 @@ const styles = StyleSheet.create({
   },
 });
 
-TimeDisplay.propTypes = {
+TimeInput.propTypes = {
   mins: PropTypes.number.isRequired,
   secs: PropTypes.number.isRequired
 }
 
-export default function TimeDisplay({ mins, secs }) {
-  const minsString = (mins < 10) ? '0' + mins : mins.toString();
-  const secString = (secs < 10) ? '0' + secs : secs.toString();
+export default function TimeInput({ mins, secs }) {
   return (
-    <View>
-      <Text>{minsString}:{secString}</Text>
-    </View>
+    <>
+      <TextInput
+        ref= {(el) => { this.username = el; }}
+        onChangeText={(username) => this.setState({username})}
+        value={this.state.username} />
+    </>
   )
 }
