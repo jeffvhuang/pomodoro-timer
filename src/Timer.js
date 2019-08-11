@@ -75,20 +75,9 @@ export default class Timer extends React.Component {
     }
   }
 
-  // Return a function based on what string is passed in to set the correct satte property
-  getOnChangeFunction = (stateProperty) => {
-    switch(stateProperty) {
-      case 'workMinutes':
-        return (value) => this.setState({workMinutes: this.getValue(value)});
-      case 'workSeconds':
-          return (value) => this.setState({workSeconds: this.getValue(value)});
-      case 'breakMinutes':
-          return (value) => this.setState({breakMinutes: this.getValue(value)});
-      case 'breakSeconds':
-          return (value) => this.setState({breakSeconds: this.getValue(value)});
-      default:
-        return () => {}
-    }
+  // Return a function based on what string is passed in to set the correct state property
+  onTimeChange = stateProperty => {
+    return value => this.setState({ [stateProperty]: this.getValue(value) })
   }
 
   // Helper to ensure only number is provided
@@ -156,19 +145,19 @@ export default class Timer extends React.Component {
           <View style={styles.controlRow}>
             <Text style={inputStyles.label}>Work:</Text>
             <TimeInput label={'Mins'} 
-              onChange={this.getOnChangeFunction('workMinutes')}
+              onChange={this.onTimeChange('workMinutes')}
               value={this.state.workMinutes.toString()} />
             <TimeInput label={'Secs'} 
-              onChange={this.getOnChangeFunction('workSeconds')}
+              onChange={this.onTimeChange('workSeconds')}
               value={this.state.workSeconds.toString()} />
           </View>
           <View style={styles.controlRow}>
             <Text style={inputStyles.label}>Break:</Text>
             <TimeInput label={'Mins'} 
-              onChange={this.getOnChangeFunction('breakMinutes')}
+              onChange={this.onTimeChange('breakMinutes')}
               value={this.state.breakMinutes.toString()} />
             <TimeInput label={'Secs'} 
-              onChange={this.getOnChangeFunction('breakSeconds')}
+              onChange={this.onTimeChange('breakSeconds')}
               value={this.state.breakSeconds.toString()} />
           </View>
         </View>
