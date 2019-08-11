@@ -75,10 +75,10 @@ export default class Timer extends React.Component {
     }
   }
 
-  // Return a function based on what string is passed in to set the correct state property
-  onTimeChange = stateProperty => {
-    return value => this.setState({ [stateProperty]: this.getValue(value) })
-  }
+  // This function returns another function.
+  // The inner function will be what is called when any change occurs in TextInput
+  // @param stateProperty: the string will be the property in state that will be updated 
+  onTimeChange = stateProperty => value => this.setState({ [stateProperty]: this.getValue(value) })
 
   // Helper to ensure only number is provided
   getValue = (value) => {
